@@ -55,7 +55,7 @@ The particular, original setup is the following:
 - You have [OBS Studio](https://obsproject.com) configured for Full-HD
   (1920x1080px) video output (see *Settings* &rarr; *Video* &rarr; *Base (Canvas) Resolution*).
 
-- You have a Birddog 4K PTZ camera like Birddog P400 as the physical camera,
+- You have a Birddog P400 as the physical camera,
   connected through SDI or NDI.
 
 - You have a scene collection in [OBS Studio](https://obsproject.com) configured,
@@ -63,7 +63,7 @@ The particular, original setup is the following:
 
   - scene `Shared-CAM1-Full`:<br/>
     (rationale: scene for "full/total" camera view)
-      - source `CAM1-Full` of type *Video Capture Device*:
+      - source `CAM1-Full` of type *Blackmagic Device* (SDI) or *NDI Source* (NDI):
           - attached to your physical 4K camera device<br/>
             (rationale: single source for physical camera)
           - transform of *Stretch to Screen* applied<br/>
@@ -71,9 +71,9 @@ The particular, original setup is the following:
   - scene `Shared-CAM1-Zoom`:<br/>
     (rationale: scene for "zoomed" camera view)
       - source `CAM1-Zoom-FG` of type *Source Mirror*:
-          - attached to source `CAM1-Full`
+          - attached to source `CAM1-Full`<br/>
             (rationale: single source for physical camera)
-          - filter *Chrome Key* applied
+          - filter *Chrome Key* applied<br/>
             (rationale: single filter for chroma-key)
           - filter *Crop/Pad* applied<br/>
             (rationale: the zoom to be applied and controlled)
@@ -82,11 +82,11 @@ The particular, original setup is the following:
       - source `CAM1-Zoom-BG` of type *Image*:
           - attached to your 4K background image<br/>
             (rationale: single source for virtual background)
-          - filter *Scaling/Aspect Ratio* applied (for 3820x2160)
+          - filter *Scaling/Aspect Ratio* applied (for 3820x2160)<br/>
             (rationale: ensure the background starts as 4K)
           - filter *Crop/Pad* applied<br/>
             (rationale: the zoom to be applied and controlled)
-          - filter *Scaling/Aspect Ratio* applied (for 1920x1080px)
+          - filter *Scaling/Aspect Ratio* applied (for 1920x1080px)<br/>
             (rationale: ensure result is still Full-HD, even on arbitrary crop areas)
   - scene `Shared-CAM1-Control`:<br/>
     (rationale: scene for cam control dock)
