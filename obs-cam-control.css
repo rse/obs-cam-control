@@ -106,6 +106,7 @@ body {
     width: 6vw;
 }
 .canvas .toolbar .button.activated {
+    background-color: #ffb000d0;
 }
 .canvas .toolbar .button.activated.active {
     background-color: #ff3333d0;
