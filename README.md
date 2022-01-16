@@ -7,37 +7,37 @@ OBS Cam Control
 About
 -----
 
-This is a small HTML5 Single-Page-Application (SPA) for running
-inside a Browser Source of [OBS Studio](https://obsproject.com).
-It provides a physical and virtual control of a Birddog 4K
-PTZ camera. The physical camera control uses the Birddog
-REST API of the camera. The virtual camera control uses [OBS
-WebSocket](https://github.com/obsproject/obs-websocket) and a
-*Crop/Pad* filter. The Browser Source of the control has to be
-part of a special "control scene" which is docked into the [OBS
-Studio](https://obsproject.com) user interface through [OBS Source
-Dock](https://github.com/exeldro/obs-source-dock).
+This is a small software solution for controlling the view of multiple
+[Birddog P400](https://bird-dog.tv/p400-overview/) cameras (providing
+4K resolution and Pan-Tilt-Zoom (PTZ) functionality) from within the
+audio/video mixing software [OBS Studio](https://obsproject.com). It
+provides a physical and virtual camera view for each device.
 
-Use Case
---------
+The physical camera views use the [Birddog REST
+API](https://bird-dog.tv/SW/API/index.html) of the camera to
+recall presets, either previously created with a [Birddog PTZ
+Keyboard](https://bird-dog.tv/ptzkeyboard-overview/) or with the [OBS
+PTZ Controls](https://github.com/glikely/obs-ptz) plugin. The physical
+camera view is intended for regular PTZ uses on non-greenscreen
+backgrounds.
 
-The particular, original use-case for this application is the following:
+The virtual camera views are intended for virtualized PTZ uses
+on greenscreen backgrounds where you cannot use the camera PTZ
+functionality, because different angles and zoom-levels would require
+the background to adjust simultanously. Instead, we use the OBS Studio
+*Crop/Pad* filter to carve out a Full-HD area from the *Chroma Key*
+filtered camera video and a companion background source. In case of
+multiple cameras, each camera view usually has to get its own dedicated
+background, usually an angle-consistent pre-rendered view from a 3D scene.
 
-- **High-Resolution Camera & Green-Screen**:
-  You are using a high-resolution (4K, 3840x2160px) Birddog camera,
-  either in front of a physical regular background or a physical
-  green-screen.
-
-- **Physical PTZ & Green-Screen**:
-  When using the physical background, you want to PTZ control the camera
-  physically. When using the green-screen you cannot use the camera PTZ
-  functionality because different angles and zoom-levels would require
-  the background to adjust simultanously.
-
-- **Simulated Dynamics & Lower-Resolution Cameras**:
-  When using the green-screen, you still want to somewhat simulate
-  multiple camera angles or zooms by just cropping various Full-HD
-  (1920x1080px) areas out of your 4K (3840x2160px) camera video.
+The solution technically consists of two parts: a HTML5
+Single-Page-Application (SPA) and a companion OBS Studio source
+filter. The SPA is intended to be running inside a *Browser Source*
+which has to be part of a special "control scene", docked into
+the [OBS Studio](https://obsproject.com) user interface through
+[OBS Source Dock](https://github.com/exeldro/obs-source-dock)
+and communicating with OBS Studio via [OBS
+WebSocket](https://github.com/obsproject/obs-websocket).
 
 Setup
 -----
