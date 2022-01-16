@@ -1,0 +1,227 @@
+/*
+**  OBS-Crop-Control ~ Remote Crop-Filter Control for OBS Studio
+**  Copyright (c) 2021-2022 Dr. Ralf S. Engelschall <rse@engelschall.com>
+**  Distributed under GPL 3.0 license <https://spdx.org/licenses/GPL-3.0-only.html>
+*/
+
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: transparent;
+}
+body {
+    color: #f0f0f0;
+    font-family: "Source Sans Pro";
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+    overflow: hidden;
+}
+
+.canvas {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    background-color: #222222;
+    overflow: hidden;
+}
+.canvas.transparent {
+    background-color: transparent;
+}
+
+.canvas .toolbar.toolbar-head {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 2vh 2vw 2vh 2vw;
+    background-color: #444444b0;
+    border-bottom-right-radius: 2vw;
+}
+.canvas .toolbar.toolbar-foot {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 2vh 2vw 2vh 2vw;
+    background-color: #444444b0;
+    border-top-left-radius: 2vw;
+}
+.canvas .toolbar {
+    display: flex;
+    flex-direction: row;
+}
+.canvas .toolbar .title {
+    color: #ffffff;
+    font-size: 5vw;
+    font-weight: bold;
+    margin-left: 1vw;
+}
+.canvas .toolbar .button-group {
+    display: flex;
+    flex-direction: row;
+}
+.canvas .toolbar .preset {
+    padding: 0 3vw 0 3vw;
+    background-color: #444444d0;
+    color: #ffffff;
+    font-weight: bold;
+    border-radius: 1vw;
+    font-size: 5vw;
+    margin-left: 1vw;
+    text-align: center;
+}
+.canvas .toolbar .preset.next {
+    background-color: #0066bbd0;
+}
+.canvas .toolbar .preset.curr {
+    background-color: #ffb000d0;
+}
+.canvas .toolbar .preset.curr.active {
+    background-color: #cc0000d0;
+}
+.canvas .toolbar .preset:hover {
+    background-color: #0066bbd0;
+}
+.canvas .toolbar .button {
+    background-color: #444444d0;
+    color: #ffffff;
+    font-weight: bold;
+    border-radius: 1vw;
+    font-size: 5vw;
+    text-align: center;
+    padding: 0 3vw 0 3vw;
+    width: 3vw;
+    box-shadow: 0 0 1vw #000000;
+}
+.canvas .toolbar.toolbar-head .button {
+    margin-right: 1vw;
+}
+.canvas .toolbar.toolbar-foot .button {
+    margin-left: 1vw;
+}
+.canvas .toolbar .button.wide {
+    padding: 0 2vw 0 2vw;
+    width: 6vw;
+}
+.canvas .toolbar .button.activated {
+}
+.canvas .toolbar .button.activated.active {
+    background-color: #ff3333d0;
+}
+.canvas .toolbar .button.duration {
+    display: none;
+}
+.canvas .toolbar .button.mode {
+    display: none;
+}
+.canvas .toolbar .button:hover {
+    background-color: #666666d0;
+}
+.canvas .toolbar .button.active {
+    display: block;
+}
+
+.canvas .cropCurr {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    border: 1vw solid #ffb000d0;
+}
+.canvas .cropCurr .title {
+    background-color: #ffb000d0;
+    color: #ffffff;
+    font-size: 4vw;
+    font-weight: bold;
+    padding: 0 2vw 1vw 1vw;
+    border-bottom-right-radius: 2vw;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.canvas .cropCurr .info {
+    background-color: #ffb000d0;
+    color: #ffffff;
+    font-size: 2vw;
+    padding: 1vw 1vw 0 2vw;
+    border-top-left-radius: 2vw;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+.canvas .cropCurr.active {
+    border: 1vw solid #cc0000d0;
+}
+.canvas .cropCurr.active .info,
+.canvas .cropCurr.active .title {
+    background-color: #cc0000d0;
+}
+
+.canvas .cropNext {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: top;
+    align-items: center;
+    box-sizing: border-box;
+    border: 1vw solid #0066bbd0;
+}
+.canvas .cropNext .title {
+    background-color: #0066bbd0;
+    color: #ffffff;
+    font-size: 4vw;
+    font-weight: bold;
+    padding: 0 2vw 1vw 1vw;
+    border-bottom-right-radius: 2vw;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.canvas .cropNext .info {
+    background-color: #0066bbd0;
+    color: #ffffff;
+    font-size: 2vw;
+    padding: 1vw 1vw 0 2vw;
+    border-top-left-radius: 2vw;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+.canvas .protector {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+}
+.canvas .protector .title {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 1vw 2vw 1vw 2vw;
+    background-color: #0066bbd0;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 3vw;
+    border-bottom-left-radius: 2vw;
+}
+
+.canvas .debug {
+    position: absolute;
+    top: 2vw;
+    left: 2vw;
+    width: 50vw;
+    padding: 1vw 2vw 1vw 2vw;
+    background-color: #0066bbd0;
+    color: #ffffff;
+    font-size: 5vw;
+}
+

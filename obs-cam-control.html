@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<!--
+**
+**  OBS Cam Control ~ Camera Control for OBS Studio
+**  Copyright (c) 2021-2022 Dr. Ralf S. Engelschall <rse@engelschall.com>
+**  Distributed under GPL 3.0 license <https://spdx.org/licenses/GPL-3.0-only.html>
+**
+-->
+<html>
+    <head>
+        <title>OBS Cam Control</title>
+        <meta charset="UTF-8"/>
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link rel="preconnect" href="https://cdn.jsdelivr.net">
+        <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" rel="stylesheet">
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue@3.2.26/dist/vue.global.prod.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/obs-websocket-js@4.0.3/dist/obs-websocket.min.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/d3-ease@3.0.1/dist/d3-ease.min.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mousetrap@1.6.5/mousetrap.min.js"></script>
+        <link href="./obs-cam-control.css" rel="stylesheet">
+    </head>
+    <body>
+        <div v-bind:class="{ transparent: transparent }" class="canvas" ref="canvas"
+            v-on:click="mouseClickLeft"
+            v-on:contextmenu.prevent="mouseClickRight"
+            v-on:mouseMove="mouseMove"
+            v-on:mouseLeave="mouseLeave"
+            v-on:wheel="mouseWheel"
+            v-bind:style="{
+                width:  dispCanvasW + 'px',
+                height: dispCanvasH + 'px'}">
+            <img
+                v-bind:src="previewImg"
+                ref="preview"
+                class="preview"
+                v-if="previewEnabled"
+                v-show="previewImg !== '' && previewShow">
+            <div v-if="mode === 'virtual'">
+                <div class="cropCurr" ref="cropCurr"
+                    v-bind:class="{ dragging: dragging, active: sourceActive }"
+                    v-bind:style="{
+                        left:   dispCropCurrX + 'px',
+                        top:    dispCropCurrY + 'px',
+                        width:  dispCropCurrW + 'px',
+                        height: dispCropCurrH + 'px' }">
+                    <!-- <div class="title" v-show="dispCropCurrW > 400" ref="cropCurrTitle">{{ title }}</div> -->
+                    <div class="info" v-show="dispCropCurrW > 400">
+                          {{ Math.round(dispCropCurrX / dispScale) }}
+                        : {{ Math.round(dispCropCurrY / dispScale) }}
+                        / {{ Math.round(dispCropCurrW / dispScale) }}
+                        x {{ Math.round(dispCropCurrH / dispScale) }}
+                    </div>
+                </div>
+                <div class="cropNext" ref="cropNext" v-show="dragging || progressing"
+                    v-bind:style="{
+                        left:   dispCropNextX + 'px',
+                        top:    dispCropNextY + 'px',
+                        width:  dispCropNextW + 'px',
+                        height: dispCropNextH + 'px' }">
+                    <!-- <div class="title" v-show="dispCropNextW > 400">{{ title }}</div> -->
+                    <div class="info" v-show="dispCropNextW > 400">
+                          {{ Math.round(dispCropNextX / dispScale) }}
+                        : {{ Math.round(dispCropNextY / dispScale) }}
+                        / {{ Math.round(dispCropNextW / dispScale) }}
+                        x {{ Math.round(dispCropNextH / dispScale) }}
+                    </div>
+                </div>
+            </div>
+            <div class="toolbar toolbar-head">
+                <div class="button-group">
+                    <div v-on:click="activate()" class="button activated wide" v-bind:class="{ active: sourceActive }">
+                        <span v-show="sourceActive"><i class="fas fa-eye"></i></span>
+                        <span v-show="!sourceActive"><i class="fas fa-eye-slash"></i></span>
+                    </div>
+                </div>
+                <div class="title">{{ title }}</div>
+            </div>
+            <div class="toolbar toolbar-foot">
+                <div class="button-group">
+                    <div v-if="mode === 'virtual'" v-for="preset of presetsVirtual" v-on:click="setPreset(preset.D)" class="button preset"
+                        v-bind:class="{ curr: preset.C, next: preset.N, active: (preset.C && sourceActive) }"
+                    >{{ preset.D }}</div>
+                    <div v-if="mode === 'physical'" v-for="preset of presetsPhysical" v-on:click="setPreset(preset.D)" class="button preset"
+                        v-bind:class="{ curr: preset.C, next: preset.N, active: (preset.C && sourceActive) }"
+                    >{{ preset.D }}</div>
+                </div>
+                <div class="button-group">
+                    <div v-on:click="duration = 1" class="button duration" v-bind:class="{ active: duration === 0 }">F</div>
+                    <div v-on:click="duration = 2" class="button duration" v-bind:class="{ active: duration === 1 }">N</div>
+                    <div v-on:click="duration = 0" class="button duration" v-bind:class="{ active: duration === 2 }">S</div>
+                </div>
+                <div class="button-group">
+                    <div v-on:click="mode = 'virtual'"  class="button mode wide" v-bind:class="{ active: mode === 'physical' }"><i class="fas fa-video"></i></div>
+                    <div v-on:click="mode = 'physical'" class="button mode wide" v-bind:class="{ active: mode === 'virtual'  }"><i class="fas fa-search"></i></div>
+                </div>
+            </div>
+            <div class="protector" ref="protector" v-show="progressing">
+                <div class="title">PROGRESS</div>
+            </div>
+            <div class="debug" v-if="debug">
+                {{ obsStudioMode }} /
+                {{ obsScenePreview }} /
+                {{ obsSceneProgram }} /
+                {{ sourceActive }}
+            </div>
+        </div>
+    </body>
+    <script type="text/javascript" src="./obs-cam-control.js"></script>
+</html>
