@@ -119,28 +119,48 @@ The particular, original setup is the following:
              - parameter *Activate Camera on PROGRAM* set to `no`
 
 - The URL (show-casing all parameters) for the SPA is like the following
-  (descriptions at the end of each line):<br/>
+  (URL parts on first line, descriptions on the second line):<br/>
 
-  `file://[...]/obs-cam-control.html` (path to SPA)<br/>
-  `?transparent=true` (make background transparent)<br/>
-  `&debug=true` (log debug information)<br/>
-  `&websocket-address=localhost:4444` (endpoint of OBS WebSocket)<br/>
-  `&websocket-password=XXX` (authentication for endpoint of OBS WebSocket)<br/>
-  `&camera-name=CAM1` (title of the camera)<br/>
-  `&camera-physical-activate=Shared-CAM-Full:Shared-CAM1-Full` (the scene source of the physical camera for activation)<br/>
-  `&camera-physical-preview=Shared-CAM1-Full:10` (the source and FPS of the physical camera for preview)<br/>
-  `&camera-physical-sources=CAM1-Full` (the sources of the physical camera for active checking)<br/>
-  `&camera-physical-canvas=3840x2160` (size of original physical camera view)<br/>
-  `&camera-physical-device=192.168.0.1` (IP address of the physical camera API)<br/>
-  `&camera-physical-presets=1,2,3,4` (pre-defined physical presets)<br/>
-  `&camera-virtual-activate=Shared-CAM-Zoom:Shared-CAM1-Zoom` (the scene source of the virtual camera for activation)<br/>
-  `&camera-virtual-sources=CAM1-Zoom-FG,CAM1-Zoom-BG` (the sources of the *Crop/Pad* filters of the virtual camera)<br/>
-  `&camera-virtual-duration=1000,4000,7000` (transition durations in milliseconds of the virtual camera)<br/>
-  `&camera-virtual-fps=30,` (transition smoothness in frames per second of the virtual camera)<br/>
-  `&camera-virtual-presets=1:0+0/3860x2160,` (pre-defined total 4K area)<br/>
-  `2:0+540/1920x1080,` (pre-defined Full-HD area middle/left)<br/>
-  `3:960+540/1920x1080,` (pre-defined Full-HD area middle/center)<br/>
-  `4:1920+540/1920x1080` (pre-defined Full-HD area middle/right)
+  - `file://[...]/obs-cam-control.html`<br/>
+    (path to SPA)
+  - `?transparent=true`<br/>
+    (make background transparent)<br/>
+  - `&debug=true`<br/>
+    (log debug information)<br/>
+  - `&websocket-address=localhost:4444`<br/>
+    (endpoint of OBS WebSocket)<br/>
+  - `&websocket-password=XXX`<br/>
+    (authentication for endpoint of OBS WebSocket)<br/>
+  - `&camera-name=CAM1`<br/>
+    (title of the camera)<br/>
+  - `&camera-physical-activate=Shared-CAM-Full:Shared-CAM1-Full`<br/>
+    (the scene source of the physical camera for activation)<br/>
+  - `&camera-physical-preview=Shared-CAM1-Full:10`<br/>
+    (the source and FPS of the physical camera for preview)<br/>
+  - `&camera-physical-sources=CAM1-Full`<br/>
+    (the sources of the physical camera for active checking)<br/>
+  - `&camera-physical-canvas=3840x2160`<br/>
+    (size of original physical camera view)<br/>
+  - `&camera-physical-device=192.168.0.1`<br/>
+    (IP address of the physical camera API)<br/>
+  - `&camera-physical-presets=1,2,3,4`<br/>
+    (pre-defined physical presets)<br/>
+  - `&camera-virtual-activate=Shared-CAM-Zoom:Shared-CAM1-Zoom`<br/>
+    (the scene source of the virtual camera for activation)<br/>
+  - `&camera-virtual-sources=CAM1-Zoom-FG,CAM1-Zoom-BG`<br/>
+    (the sources of the *Crop/Pad* filters of the virtual camera)<br/>
+  - `&camera-virtual-duration=1000,4000,7000`<br/>
+    (transition durations in milliseconds of the virtual camera)<br/>
+  - `&camera-virtual-fps=30,`<br/>
+    (transition smoothness in frames per second of the virtual camera)<br/>
+  - `&camera-virtual-presets=1:0+0/3860x2160,`<br/>
+    (pre-defined total 4K area)<br/>
+  - `2:0+540/1920x1080,`<br/>
+    (pre-defined Full-HD area middle/left)<br/>
+  - `3:960+540/1920x1080,`<br/>
+    (pre-defined Full-HD area middle/center)<br/>
+  - `4:1920+540/1920x1080`<br/>
+    (pre-defined Full-HD area middle/right)
 
 License
 -------
