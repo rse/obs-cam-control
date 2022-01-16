@@ -67,6 +67,11 @@
                     </div>
                 </div>
             </div>
+            <div v-if="mode === 'physical'">
+                <div class="cropFull"
+                    v-bind:class="{ active: sourceActive }"
+                ></div>
+            </div>
             <div class="toolbar toolbar-head">
                 <div class="button-group">
                     <div v-on:click="activate()" class="button activated wide" v-bind:class="{ active: sourceActive }">
