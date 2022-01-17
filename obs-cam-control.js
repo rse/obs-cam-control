@@ -52,8 +52,9 @@ const app = {
             dispDragPointerY:  0,
             dragging:          false,
             progressing:       false,
-            activatePhysical:  "",
-            activateVirtual:   "",
+            activateCamera:    [],
+            activatePhysical:  [],
+            activateVirtual:   [],
             device:            "192.168.0.1",
             mode:              "virtual"
         }
@@ -83,11 +84,14 @@ const app = {
         if (params.cameraName === undefined)
             throw new Error("missing \"camera-name\" parameter")
         this.title = params.cameraName
+        if (params.cameraActivate === undefined)
+            throw new Error("missing \"camera-activate\" parameter")
+        this.activateCamera = params.cameraActivate.split(/,/)
 
         /*  take physical camera options  */
         if (params.cameraPhysicalActivate === undefined)
             throw new Error("missing \"camera-physical-activate\" parameter")
-        this.activatePhysical = params.cameraPhysicalActivate
+        this.activatePhysical = params.cameraPhysicalActivate.split(/,/)
         if (params.cameraPhysicalCanvas === undefined)
             throw new Error("missing \"camera-physical-canvas\" parameter")
         let m
@@ -109,7 +113,7 @@ const app = {
         /*  take virtual camera options  */
         if (params.cameraVirtualActivate === undefined)
             throw new Error("missing \"camera-virtual-activate\" parameter")
-        this.activateVirtual = params.cameraVirtualActivate
+        this.activateVirtual = params.cameraVirtualActivate.split(/,/)
         if (params.cameraVirtualSources === undefined)
             throw new Error("missing \"camera-virtual-sources\" parameter")
         this.sourcesVirtual = params.cameraVirtualSources.split(/,/)
@@ -177,7 +181,7 @@ const app = {
             })
         }
         Mousetrap.bind("a", async () => {
-            this.activate()
+            this.activate("camera")
         })
 
         /*  recognize changes  */
@@ -276,7 +280,7 @@ const app = {
         })
         this.obs.on("BroadcastCustomMessage", async (ev) => {
             console.log(ev)
-            if (ev.realm === "obs-cam-control-update-active-scene")
+            if (ev.realm === "obs-cam-control-activate-camera")
                 updateActiveScene()
         })
         setInterval(() => {
@@ -616,27 +620,40 @@ const app = {
         },
 
         /*  activate a camera  */
-        async activate () {
-            if (this.sourceActive)
-                return
-            const sceneItems = [ this.activatePhysical, this.activateVirtual ]
-            for (const sceneItem of sceneItems) {
-                const m = sceneItem.match(/^(.+):(.+)$/)
-                if (m === null)
-                    return
-                const [ , sceneName, itemName ] = m
-                await this.obs.send("SetSceneItemProperties", {
-                    "scene-name": sceneName,
-                    item: itemName,
-                    visible: true
-                })
+        async activate (mode) {
+            const activateSource = async (sceneItems) => {
+                let activate = true
+                for (const sceneItem of sceneItems) {
+                    const m = sceneItem.match(/^(.+):(.+)$/)
+                    if (m === null)
+                        return
+                    const [ , sceneName, itemName ] = m
+                    await this.obs.send("SetSceneItemProperties", {
+                        "scene-name": sceneName,
+                        item: itemName,
+                        visible: activate
+                    })
+                    if (activate)
+                        activate = false
+                }
+                if (mode === "camera") {
+                    setTimeout(() => {
+                        this.obs.send("BroadcastCustomMessage", {
+                            realm: `obs-cam-control-activate-${mode}`,
+                            data: {}
+                        })
+                    }, 500)
+                }
             }
-            setTimeout(() => {
-                this.obs.send("BroadcastCustomMessage", {
-                    realm: "obs-cam-control-update-active-scene",
-                    data: {}
-                })
-            }, 500)
+            if (mode === "camera") {
+                if (this.sourceActive)
+                    return
+                await activateSource(this.activateCamera)
+            }
+            else if (mode === "virtual" || mode === "physical") {
+                this.mode = mode
+                await activateSource(mode === "virtual" ? this.activateVirtual : this.activatePhysical)
+            }
         }
     }
 }

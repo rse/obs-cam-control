@@ -95,23 +95,22 @@ The particular, original setup is the following:
             (rationale: running the SPA)
       - source `Shared-CAM1-Full` of type *Scene*:<br/>
         (rationale: show physical camera in background)
-  - scene `Shared-CAM-Full`:<br/>
+  - scene `Shared-CAM1`:<br/>
     (rationale: view of all full physical cameras)
       - source `Shared-CAM1-Full` of type *Scene*
-      - source `Shared-CAM2-Full` of type *Scene*
-      - source `Shared-CAM3-Full` of type *Scene*
-  - scene `Shared-CAM-Zoom`:<br/>
-    (rationale: view of all zoomed virtual cameras)
       - source `Shared-CAM1-Zoom` of type *Scene*
-      - source `Shared-CAM2-Zoom` of type *Scene*
-      - source `Shared-CAM3-Zoom` of type *Scene*
+  - scene `Shared-CAM`:<br/>
+    (rationale: view of all full and zoomed cameras)
+      - source `Shared-CAM1` of type *Scene*
+      - source `Shared-CAM2` of type *Scene*
+      - source `Shared-CAM3` of type *Scene*
   - scene `Scene-01`:<br/>
     (rationale: particular event scene based on the full physical camera view)
-      - source `Shared-CAM-Full` of type *Scene*<br/>
-        (rationale: include full camera view)
+      - source `Shared-CAM` of type *Scene*<br/>
+        (rationale: include camera view)
   - scene `Scene-02`:<br/>
     (rationale: particular event scene based on the zoomed virtual camera view)
-      - source `Shared-CAM1-Zoom` of type *Source Mirror*<br/>
+      - source `Shared-CAM1` of type *Source Mirror*<br/>
         (rationale: include zoomed camera view)
           - filter *Camera Control* applied<br/>
             (rationale: automatically control camera)
@@ -133,8 +132,10 @@ The particular, original setup is the following:
     (authentication for endpoint of OBS WebSocket)<br/>
   - `&camera-name=CAM1`<br/>
     (title of the camera)<br/>
-  - `&camera-physical-activate=Shared-CAM-Full:Shared-CAM1-Full`<br/>
-    (the scene source of the physical camera for activation)<br/>
+  - `&camera-activate=Shared-CAM:Shared-CAM1,Shared-CAM:Shared-CAM2,Shared-CAM:Shared-CAM3`<br/>
+    (the scene source of the camera for activation)<br/>
+  - `&camera-physical-activate=Shared-CAM1:Shared-CAM1-Full,Shared-CAM1:Shared-CAM1-Zoom`<br/>
+    (the scene source of the physical camera for full view)<br/>
   - `&camera-physical-preview=Shared-CAM1-Full:10`<br/>
     (the source and FPS of the physical camera for preview)<br/>
   - `&camera-physical-sources=CAM1-Full`<br/>
@@ -145,8 +146,8 @@ The particular, original setup is the following:
     (IP address of the physical camera API)<br/>
   - `&camera-physical-presets=1,2,3,4`<br/>
     (pre-defined physical presets)<br/>
-  - `&camera-virtual-activate=Shared-CAM-Zoom:Shared-CAM1-Zoom`<br/>
-    (the scene source of the virtual camera for activation)<br/>
+  - `&camera-virtual-activate=Shared-CAM1:Shared-CAM1-Zoom,Shared-CAM1:Shared-CAM1-Full`<br/>
+    (the scene source of the virtual camera for zoom view)<br/>
   - `&camera-virtual-sources=CAM1-Zoom-FG,CAM1-Zoom-BG`<br/>
     (the sources of the *Crop/Pad* filters of the virtual camera)<br/>
   - `&camera-virtual-duration=1000,4000,7000`<br/>

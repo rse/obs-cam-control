@@ -74,7 +74,7 @@
             </div>
             <div class="toolbar toolbar-head">
                 <div class="button-group">
-                    <div v-on:click="activate()" class="button activated wide" v-bind:class="{ active: sourceActive }">
+                    <div v-on:click="activate('camera')" class="button activated wide" v-bind:class="{ active: sourceActive }">
                         <span v-show="sourceActive"><i class="fas fa-eye"></i></span>
                         <span v-show="!sourceActive"><i class="fas fa-eye-slash"></i></span>
                     </div>
@@ -96,8 +96,8 @@
                     <div v-on:click="duration = 0" class="button duration" v-bind:class="{ active: duration === 2 }">S</div>
                 </div>
                 <div class="button-group">
-                    <div v-on:click="mode = 'virtual'"  class="button mode wide" v-bind:class="{ active: mode === 'physical' }"><i class="fas fa-video"></i></div>
-                    <div v-on:click="mode = 'physical'" class="button mode wide" v-bind:class="{ active: mode === 'virtual'  }"><i class="fas fa-search"></i></div>
+                    <div v-on:click="activate('virtual')"  class="button mode wide" v-bind:class="{ active: mode === 'physical' }"><i class="fas fa-video"></i></div>
+                    <div v-on:click="activate('physical')" class="button mode wide" v-bind:class="{ active: mode === 'virtual'  }"><i class="fas fa-search"></i></div>
                 </div>
             </div>
             <div class="protector" ref="protector" v-show="progressing">
