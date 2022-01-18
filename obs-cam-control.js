@@ -645,11 +645,8 @@ const app = {
                     }, 500)
                 }
             }
-            if (mode === "camera") {
-                if (this.sourceActive)
-                    return
+            if (mode === "camera")
                 await activateSource(this.activateCamera)
-            }
             else if (mode === "virtual" || mode === "physical") {
                 this.mode = mode
                 await activateSource(mode === "virtual" ? this.activateVirtual : this.activatePhysical)
